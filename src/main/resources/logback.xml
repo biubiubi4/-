@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <property name="pattern" value="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} %logger{50}.%M %L:%m%n"/>
+    <property name="log_dir" value="d:/temp/logs"/>
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <!--<target>System.err</target>-->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern}</pattern>
+        </encoder>
+    </appender>
+    <!--
+    <appender name="file" class="ch.qos.logback.core.FileAppender">
+        <file>${log_dir}/logback.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern}</pattern>
+        </encoder>
+    </appender>
+    -->
+    <appender name="htmlFile" class="ch.qos.logback.core.FileAppender">
+        <file>${log_dir}/logback.html</file>
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <Layout class="ch.qos.logback.classic.html.HTMLLayout">
+                <pattern>%-5level%d{yyyy-MM-dd HH:mm:ss.SSS}%c%m%L%thread%m</pattern>
+            </Layout>
+        </encoder>
+    </appender>
+
+
+    <logger name="controller" level="DEBUG" additivity="false">
+        <appender-ref ref="console"/>
+    </logger>
+    <logger name="service" level="DEBUG" additivity="false">
+        <appender-ref ref="console"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="console"/>
+        <appender-ref ref="htmlFile"/>
+    </root>
+</configuration>
