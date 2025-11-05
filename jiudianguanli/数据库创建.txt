@@ -1,0 +1,62 @@
+-- 用户表
+CREATE TABLE user (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(32) NOT NULL UNIQUE,
+    password VARCHAR(64) NOT NULL,
+    phone VARCHAR(20),
+    role VARCHAR(10) DEFAULT 'user'
+);
+
+-- 管理员表（建议初始化账号后禁止前台修改）
+CREATE TABLE admin (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(32) NOT NULL UNIQUE,
+    password VARCHAR(64) NOT NULL
+);
+
+-- 房型信息
+CREATE TABLE room_type (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(32) NOT NULL,
+    description VARCHAR(128),
+    base_price DECIMAL(10,2) NOT NULL
+);
+
+-- 具体房间
+CREATE TABLE room (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    room_number VARCHAR(16) NOT NULL UNIQUE,
+    type_id INT NOT NULL,
+    status VARCHAR(16) NOT NULL, -- 空闲/预订/入住/维修
+    FOREIGN KEY(type_id) REFERENCES room_type(id)
+);
+
+-- 房价策略
+CREATE TABLE price_policy (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    type_id INT NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY(type_id) REFERENCES room_type(id)
+);
+
+-- 订单表
+CREATE TABLE `order` (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    room_id INT NOT NULL,
+    check_in DATE NOT NULL,
+    check_out DATE NOT NULL,
+    status VARCHAR(16) NOT NULL, -- 预订/已入住/已退房/已取消
+    total_price DECIMAL(10,2),
+    create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(user_id) REFERENCES user(id),
+    FOREIGN KEY(room_id) REFERENCES room(id)
+);
+
+
+INSERT INTO admin (username, password) VALUES
+('admin1', '123456'),
+('admin2', '123456'),
+('admin3', '123456');
